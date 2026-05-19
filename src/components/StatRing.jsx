@@ -1,4 +1,4 @@
-function StatRing({ value, label, color }) {
+function StatRing({ value, label, target, color }) {
   return (
     <div className={`w-16 h-16 rounded-full border-2 ${color}
                      flex flex-col items-center justify-center`}>
