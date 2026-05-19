@@ -1,34 +1,56 @@
-import './index.css';
+import { useState } from 'react';
+
+import WatchFrame from './components/WatchFrame';
+import TimeDisplay from './components/TimeDisplay';
 import StatRing from './components/StatRing';
+import StopwatchWidget from './components/StopwatchWidget';
+import ShowCurrentMode from './components/label';
+
+import './index.css';
 
 function App() {
+  const [currentMode, setCurrentMode] = useState('clock');
+
   return (
-    <div className="container">
-      <div className="label">
-        <h1>App.jsx - monolithic, no components</h1>
+    <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center">
+      <div>
+        <h1 className="text-5xl font-bold text-white text-center mb-4">OmniWatch UI</h1>
+          <p className="text-gray-400 text-lg mb-8">
+            A simple project to introduce React and Tailwindcss.
+          </p>
       </div>
 
-      <div className="watch-frame">
+      <ShowCurrentMode currentMode={currentMode} />
+      
+      <WatchFrame>
 
-        <div className="watch-time">
-          10:42 AM
+        {currentMode === 'clock' && (
+          <TimeDisplay hours="22" minutes="42" seconds="05" format="12" />
+        )}
+
+        <div className="flex gap-4">
+          <StatRing label="Steps"      value="8,432" target="10,000" color="border-green-500"  />
+          <StatRing label="Calories"   value="420"   target="600"    color="border-orange-500" />
+          <StatRing label="Heart Rate" value="72"    target="120"    color="border-red-500"    />
         </div>
 
-        <div className="watch-metrics">
-          <StatRing value="8,432" label="Steps" color="green" />
-          <StatRing value="420" label="Cal" color="orange" />
-          <StatRing value="72" label="BPM" color="red" />
-        </div>
+        {currentMode === 'stopwatch' && (
+          <StopwatchWidget
+            currentTime="01:23.45"
+            isRunning={false}
+            lapTimes={['00:58.20', '00:25.25']}
+          />
+        )}
 
-        <div className="watch-stopwatch-label">STOPWATCH</div>
-        <div className="watch-stopwatch-time">01:23.45</div>
+        {/* Mode toggle */}
+        <button
+          onClick={() => setCurrentMode(prev => prev === 'clock' ? 'stopwatch' : 'clock')}
+          className="mt-2 text-xs text-slate-400 hover:text-white transition-colors"
+        >
+          {currentMode === 'clock' ? 'Switch to Stopwatch' : 'Switch to Clock'}
+        </button>
 
-        <div className="watch-laps">
-          <div className="lap-chip">LAP 1  00:58.20</div>
-          <div className="lap-chip">LAP 2  00:25.25</div>
-        </div>
-
-      </div>
+      </WatchFrame>
     </div>
   );
 }
