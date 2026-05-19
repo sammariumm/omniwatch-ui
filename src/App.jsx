@@ -4,7 +4,7 @@ import WatchFrame from './components/WatchFrame';
 import TimeDisplay from './components/TimeDisplay';
 import StatRing from './components/StatRing';
 import StopwatchWidget from './components/StopwatchWidget';
-import ShowCurrentMode from './components/label';
+import ShowCurrentMode from './components/ShowCurrentMode';
 
 import './index.css';
 

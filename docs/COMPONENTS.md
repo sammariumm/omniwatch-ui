@@ -32,14 +32,55 @@ Shows current time (hardcoded).
 |hours | int  | Shows current hour  |
 |minutes| int | Shows current minute |
 |seconds| int | Shows current second |
-|format | int | Sets the format to civilian time (12) or military time (00) |
+|format | int | Sets the format to civilian time (12) or military time (00 or 24) |
 
 ### Example
 
 ```js
-// Time is shown as military format (00)
+// Time is shown as military format
 <TimeDisplay hours="22" minutes="42" seconds="05" format="00" /> 
 ```
 
 ---
 
+## StopwatchWidget
+
+Widget that displays a stopwatch. Can be toggled by clicking the `Switch to Stopwatch` button.
+
+### Props
+
+| Prop | Type | Description                 |
+|------|------|-----------------------------|
+|currentTime|string| Accepts current time as a string |
+|isRunning|boolean| Changes text color to green if set to true |
+|lapTimes|array| Accepts an array of strings representing time | 
+
+### Example
+
+```js
+// Shows only one lap
+<StopwatchWidget currentTime="01:23.45" isRunning={false} lapTimes={['00:58.20']} />
+```
+
+---
+
+## WatchFrame
+Outer box that serves as the digital manifestation of a watch.
+
+### Props
+
+| Prop | Type | Description                 |
+|------|------|-----------------------------|
+|children| node | Renders the content passed to `WatchFrame`
+
+### Example
+
+```js
+<WatchFrame>
+    <TimeDisplay hours="22" minutes="42" seconds="05" format="12" />
+</WatchFrame>
+```
+
+---
+
+## 
