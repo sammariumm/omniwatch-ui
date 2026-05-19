@@ -1,4 +1,5 @@
 import './index.css';
+import StatRing from './components/StatRing';
 
 function App() {
   return (
@@ -14,22 +15,9 @@ function App() {
         </div>
 
         <div className="watch-metrics">
-
-          <div className="metric-ring metric-ring--green">
-            <div className="metric-value">8,432</div>
-            <div className="metric-label">Steps</div>
-          </div>
-
-          <div className="metric-ring metric-ring--orange">
-            <div className="metric-value">420</div>
-            <div className="metric-label">Cal</div>
-          </div>
-
-          <div className="metric-ring metric-ring--red">
-            <div className="metric-value">72</div>
-            <div className="metric-label">BPM</div>
-          </div>
-
+          <StatRing value="8,432" label="Steps" color="green" />
+          <StatRing value="420" label="Cal" color="orange" />
+          <StatRing value="72" label="BPM" color="red" />
         </div>
 
         <div className="watch-stopwatch-label">STOPWATCH</div>
