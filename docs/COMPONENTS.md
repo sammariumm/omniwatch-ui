@@ -71,7 +71,7 @@ Outer box that serves as the digital manifestation of a watch.
 
 | Prop | Type | Description                 |
 |------|------|-----------------------------|
-|children| node | Renders the content passed to `WatchFrame`
+|children| node | Renders the content passed to `WatchFrame` |
 
 ### Example
 
@@ -83,4 +83,18 @@ Outer box that serves as the digital manifestation of a watch.
 
 ---
 
-## 
+## ShowCurrentMode
+
+Displays the current mode set as `Clock` or `Stopwatch`.
+
+### Props
+
+| Prop | Type | Description                 |
+|------|------|-----------------------------|
+|currentMode| string | Shows the current display mode |
+
+### Example 
+
+```js
+<ShowCurrentMode currentMode={currentMode} />
+```
