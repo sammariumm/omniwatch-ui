@@ -6,15 +6,10 @@ import StatRing from './components/StatRing';
 import StopwatchWidget from './components/StopwatchWidget';
 import ShowCurrentMode from './components/ShowCurrentMode';
 
+import useStopwatch from './hooks/useStopwatch';
+import useTimeDisplay from './hooks/useTimeDisplay';
+
 import './index.css';
-
-function formatTime(ms) {
-  const minutes = Math.floor(ms / 60000);
-  const seconds = Math.floor((ms % 60000) / 1000);
-  const centiseconds = Math.floor((ms % 1000) / 10);
-
-  return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}.${String(centiseconds).padStart(2, '0')}`;
-}
 
 function generateRandom(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min
@@ -23,52 +18,18 @@ function generateRandom(min, max) {
 function App() {
   const [currentMode, setCurrentMode] = useState('clock');
 
-  // Time state variables
-  const [time, setTime] = useState(new Date());
+  // Stopwatch
+  const {
+    currentTime,
+    isRunning,
+    lapTimes,
+    handleStart,
+    handleStop,
+    handleLap,
+    handleReset,
+  } = useStopwatch();
 
-  useEffect(() => {
-    const id = setInterval(()=> {
-      setTime(new Date())
-    }, 1000)
-    return () => clearInterval(id)
-  }, [])
-
-  // Stopwatch widget state variables
-  const [elapsed, setElapsed] = useState(0);
-  const [isRunning, setIsRunning] = useState(false);
-  const [lapTimes, setLapTimes] = useState([]);
-
-  // Functional updater -> avoids stale closure
-  //setElapsed(prev => prev + 10);
-
-  // Lap appends to array
-  //setLapTimes(prev => [...prev, formatTime(elapsed)]);
-
-  useEffect(() => {
-    if (!isRunning) return;
-
-    const interval = setInterval(() => {
-      setElapsed(prev => prev + 10);
-    }, 10);
-
-    return () => clearInterval(interval);
-  }, [isRunning]);
-
-  // Stopwatch widget Handlers
-  const handleStart = () => setIsRunning(true);
-  const handleStop = () => setIsRunning(false);
-  
-  // Implemented useCallback
-  const handleLap = useCallback(() => {
-    if (!isRunning) return;
-    setLapTimes(prev => [...prev, formatTime(elapsed)]);
-  }, [isRunning, elapsed])
-
-  const handleReset = () => {
-    setIsRunning(false);
-    setElapsed(0);
-    setLapTimes([]);
-  };
+  const { time } = useTimeDisplay();
 
   // Stats state variable
   const [stats, setStats] = useState({
@@ -116,17 +77,15 @@ function App() {
           </p>
       </div>
 
-      <ShowCurrentMode currentMode={currentMode} />
+      {/*<ShowCurrentMode currentMode={currentMode} />*/}
       
       <WatchFrame>
 
         {/* Mode toggle */}
-        <button
-          onClick={() => setCurrentMode(prev => prev === 'clock' ? 'stopwatch' : 'clock')}
-          className="mt-2 text-xs text-slate-400 hover:text-white transition-colors"
-        >
-          {currentMode === 'clock' ? 'Switch to Stopwatch' : 'Switch to Clock'}
-        </button>
+        <ShowCurrentMode
+          currentMode={currentMode}
+          onToggle={() => setCurrentMode(prev => prev === 'clock' ? 'stopwatch' : 'clock')}
+        />
 
         {currentMode === 'clock' && (
           <TimeDisplay hours={time.getHours()} minutes={time.getMinutes()} seconds={time.getSeconds()} format="12" />
@@ -149,7 +108,7 @@ function App() {
 
         {currentMode === 'stopwatch' && (
           <StopwatchWidget
-            currentTime={formatTime(elapsed)}
+            currentTime={currentTime}
             isRunning={isRunning}
             lapTimes={lapTimes}
             onStart={handleStart}  
