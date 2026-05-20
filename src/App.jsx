@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import WatchFrame from './components/WatchFrame';
 import TimeDisplay from './components/TimeDisplay';
@@ -58,10 +58,11 @@ function App() {
   const handleStart = () => setIsRunning(true);
   const handleStop = () => setIsRunning(false);
   
-  const handleLap = () => {
+  // Implemented useCallback
+  const handleLap = useCallback(() => {
     if (!isRunning) return;
     setLapTimes(prev => [...prev, formatTime(elapsed)]);
-  };
+  }, [isRunning, elapsed])
 
   const handleReset = () => {
     setIsRunning(false);
@@ -79,7 +80,7 @@ function App() {
   const [lastSync, setLastSync] = useState(null);
   const [isSyncing, setIsSyncing] = useState(false);
 
-  const handleSyncStats = () => {
+  const handleSyncStats = useCallback(() => {
     setIsSyncing(true);
 
     // Simulate a network request
@@ -92,7 +93,7 @@ function App() {
       setLastSync(new Date());
       setIsSyncing(false);
     }, 1000);
-  };
+  }, [])
 
   // Spread to update one key
   // Heart rate interval 
