@@ -27,7 +27,7 @@ function App() {
   } = useStopwatch();
 
   // Time display
-  const { time } = useTimeDisplay();
+  const { time, format, handleToggleFormat } = useTimeDisplay();
 
   // Stats
   const { stats, lastSync,isSyncing, handleSyncStats } = useStats();
@@ -52,7 +52,7 @@ function App() {
         />
 
         {currentMode === 'clock' && (
-          <TimeDisplay hours={time.getHours()} minutes={time.getMinutes()} seconds={time.getSeconds()} format="12" />
+          <TimeDisplay hours={time.getHours()} minutes={time.getMinutes()} seconds={time.getSeconds()} format={format} onClick={handleToggleFormat}  />
         )}
 
         <div className="flex gap-4">
