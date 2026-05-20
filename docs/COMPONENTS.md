@@ -33,6 +33,7 @@ Shows current time (hardcoded).
 |minutes| int | Shows current minute |
 |seconds| int | Shows current second |
 |format | int | Sets the format to civilian time (12) or military time (00 or 24) |
+|onClick| () => void | Calls the function passed to it when time is clicked |
 
 ### Example
 
