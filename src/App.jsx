@@ -8,9 +8,18 @@ import ShowCurrentMode from './components/ShowCurrentMode';
 
 import './index.css';
 
+function formatTime(ms) {
+  const minutes = Math.floor(ms / 60000);
+  const seconds = Math.floor((ms % 60000) / 1000);
+  const centiseconds = Math.floor((ms % 1000) / 10);
+
+  return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}.${String(centiseconds).padStart(2, '0')}`;
+}
+
 function App() {
   const [currentMode, setCurrentMode] = useState('clock');
 
+  // Time state variables
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {
@@ -19,6 +28,43 @@ function App() {
     }, 1000)
     return () => clearInterval(id)
   }, [])
+
+  // Stopwatch widget state variables
+  const [elapsed, setElapsed] = useState(0);
+  const [isRunning, setIsRunning] = useState(false);
+  const [lapTimes, setLapTimes] = useState([]);
+
+  // Functional updater -> avoids stale closure
+  //setElapsed(prev => prev + 10);
+
+  // Lap appends to array
+  //setLapTimes(prev => [...prev, formatTime(elapsed)]);
+
+  useEffect(() => {
+    if (!isRunning) return;
+
+    const interval = setInterval(() => {
+      setElapsed(prev => prev + 10);
+    }, 10);
+
+    return () => clearInterval(interval);
+  }, [isRunning]);
+
+  // Stopwatch widget Handlers
+  const handleStart = () => setIsRunning(true);
+  const handleStop = () => setIsRunning(false);
+  
+  const handleLap = () => {
+    if (!isRunning) return;
+    setLapTimes(prev => [...prev, formatTime(elapsed)]);
+  };
+
+  const handleReset = () => {
+    setIsRunning(false);
+    setElapsed(0);
+    setLapTimes([]);
+  };
+
 
   return (
     <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center">
@@ -34,7 +80,7 @@ function App() {
       <WatchFrame>
 
         {currentMode === 'clock' && (
-          <TimeDisplay hours={time.getHours()} minutes={time.getMinutes()} seconds={time.getSeconds()} format="12" />
+          <TimeDisplay hours={time.getHours()} minutes={time.getMinutes()} seconds={time.getSeconds()} format="00" />
         )}
 
         <div className="flex gap-4">
@@ -45,9 +91,13 @@ function App() {
 
         {currentMode === 'stopwatch' && (
           <StopwatchWidget
-            currentTime="01:23.45"
-            isRunning={false}
-            lapTimes={['00:58.20', '00:25.25']}
+            currentTime={formatTime(elapsed)}
+            isRunning={isRunning}
+            lapTimes={lapTimes}
+            onStart={handleStart}   // ← was onStartStop
+            onStop={handleStop}     // ← new
+            onLap={handleLap}
+            onReset={handleReset}
           />
         )}
 
