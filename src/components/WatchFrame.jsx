@@ -1,14 +1,11 @@
 function WatchFrame({ children }) {
   return (
-    <div className="w-74 h-90 rounded-[3rem] bg-gray-800
-                    border-2 border-gray-700 flex items-center
-                    justify-center shadow-2xl">
-      <div className="w-66s h-82 rounded-[2.5rem] bg-gray-900
-                      flex flex-col items-center justify-center gap-4 p-4">
+    <div className="w-85 h-[400px] bg-slate-900 rounded-[3rem] border-8 border-slate-700 shadow-2xl p-6 overflow-hidden">
+      <div className="flex flex-col items-center gap-3">
         {children}
       </div>
     </div>
-  )
+  );
 }
 
 export default WatchFrame;
