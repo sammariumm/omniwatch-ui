@@ -16,6 +16,10 @@ function formatTime(ms) {
   return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}.${String(centiseconds).padStart(2, '0')}`;
 }
 
+function generateRandom(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min
+}
+
 function App() {
   const [currentMode, setCurrentMode] = useState('clock');
 
@@ -65,6 +69,42 @@ function App() {
     setLapTimes([]);
   };
 
+  // Stats state variable
+  const [stats, setStats] = useState({
+    steps: generateRandom(5000, 12000),
+    calories: generateRandom(200, 800),
+    heartRate: generateRandom(58, 110),
+  })
+
+  const [lastSync, setLastSync] = useState(null);
+  const [isSyncing, setIsSyncing] = useState(false);
+
+  const handleSyncStats = () => {
+    setIsSyncing(true);
+
+    // Simulate a network request
+    setTimeout(() => {
+      setStats({
+        steps:     generateRandom(5000, 12000),
+        calories:  generateRandom(200, 800),
+        heartRate: generateRandom(58, 110),
+      });
+      setLastSync(new Date());
+      setIsSyncing(false);
+    }, 1000);
+  };
+
+  // Spread to update one key
+  // Heart rate interval 
+  useEffect(() => {
+    const id = setInterval(() => {
+      const delta = (Math.random() * 10 - 5) | 0
+      setStats(prev => ({
+        ...prev, heartRate: prev.heartRate + delta
+      }))
+    }, 3000)
+    return () => clearInterval(id)
+  }, [])
 
   return (
     <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center">
@@ -92,24 +132,39 @@ function App() {
         )}
 
         <div className="flex gap-4">
-          <StatRing label="Steps"      value="8,432" target="10,000" color="border-green-500"  />
-          <StatRing label="Calories"   value="420"   target="600"    color="border-orange-500" />
-          <StatRing label="Heart Rate" value="72"    target="120"    color="border-red-500"    />
+          <StatRing label="Steps"      value={stats.steps.toLocaleString()} target="10,000" color="border-green-500"  />
+          <StatRing label="Cal"        value={stats.calories}               target="800"    color="border-orange-500" />
+          <StatRing label="BPM"        value={stats.heartRate}              target="120"    color="border-red-500"    />
         </div>
+
+        {/* Sync button */}
+        <button
+          onClick={handleSyncStats}
+          disabled={isSyncing}
+          className="mt-2 px-5 py-1.5 bg-blue-500 hover:bg-blue-400 disabled:opacity-50 text-white text-xs font-semibold rounded-full transition-colors"
+        >
+          {isSyncing ? 'Syncing...' : '⇄ SYNC STATS'}
+        </button>
 
         {currentMode === 'stopwatch' && (
           <StopwatchWidget
             currentTime={formatTime(elapsed)}
             isRunning={isRunning}
             lapTimes={lapTimes}
-            onStart={handleStart}   // ← was onStartStop
-            onStop={handleStop}     // ← new
+            onStart={handleStart}  
+            onStop={handleStop}   
             onLap={handleLap}
             onReset={handleReset}
           />
         )}
 
       </WatchFrame>
+
+      <p className="mt-3 text-xs text-slate-400">
+        {lastSync
+          ? `last sync: ${lastSync.toLocaleTimeString()}`
+          : 'never synced'}
+      </p>
     </div>
   );
 }
