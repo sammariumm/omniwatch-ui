@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import WatchFrame from './components/WatchFrame';
 import TimeDisplay from './components/TimeDisplay';
@@ -10,6 +10,15 @@ import './index.css';
 
 function App() {
   const [currentMode, setCurrentMode] = useState('clock');
+
+  const [time, setTime] = useState(new Date());
+
+  useEffect(() => {
+    const id = setInterval(()=> {
+      setTime(new Date())
+    }, 1000)
+    return () => clearInterval(id)
+  }, [])
 
   return (
     <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center">
@@ -25,7 +34,7 @@ function App() {
       <WatchFrame>
 
         {currentMode === 'clock' && (
-          <TimeDisplay hours="22" minutes="42" seconds="05" format="12" />
+          <TimeDisplay hours={time.getHours()} minutes={time.getMinutes()} seconds={time.getSeconds()} format="12" />
         )}
 
         <div className="flex gap-4">
