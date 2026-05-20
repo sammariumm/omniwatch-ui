@@ -89,6 +89,7 @@ Outer box that serves as the digital manifestation of a watch.
 
 ```js
 <WatchFrame>
+    // Hardcoded values
     <TimeDisplay hours="22" minutes="42" seconds="05" format="12" />
 </WatchFrame>
 ```
