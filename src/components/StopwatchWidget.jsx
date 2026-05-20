@@ -5,7 +5,7 @@ function StopwatchWidget({ currentTime, isRunning, lapTimes, onStart, onStop, on
       <p className="text-xs tracking-widest text-slate-400 mb-1">STOPWATCH</p>
 
       {/* ✅ Color switches based on isRunning */}
-      <div className={`text-4xl font-mono tracking-widest mb-3 ${isRunning ? 'text-green-400' : 'text-white'}`}>
+      <div className={`text-4xl mb-3 ${isRunning ? 'text-green-400' : 'text-white'}`}>
         {currentTime}
       </div>
 

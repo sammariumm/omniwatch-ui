@@ -79,8 +79,16 @@ function App() {
       
       <WatchFrame>
 
+        {/* Mode toggle */}
+        <button
+          onClick={() => setCurrentMode(prev => prev === 'clock' ? 'stopwatch' : 'clock')}
+          className="mt-2 text-xs text-slate-400 hover:text-white transition-colors"
+        >
+          {currentMode === 'clock' ? 'Switch to Stopwatch' : 'Switch to Clock'}
+        </button>
+
         {currentMode === 'clock' && (
-          <TimeDisplay hours={time.getHours()} minutes={time.getMinutes()} seconds={time.getSeconds()} format="00" />
+          <TimeDisplay hours={time.getHours()} minutes={time.getMinutes()} seconds={time.getSeconds()} format="12" />
         )}
 
         <div className="flex gap-4">
@@ -100,14 +108,6 @@ function App() {
             onReset={handleReset}
           />
         )}
-
-        {/* Mode toggle */}
-        <button
-          onClick={() => setCurrentMode(prev => prev === 'clock' ? 'stopwatch' : 'clock')}
-          className="mt-2 text-xs text-slate-400 hover:text-white transition-colors"
-        >
-          {currentMode === 'clock' ? 'Switch to Stopwatch' : 'Switch to Clock'}
-        </button>
 
       </WatchFrame>
     </div>
