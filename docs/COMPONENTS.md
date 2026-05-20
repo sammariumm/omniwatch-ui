@@ -37,15 +37,15 @@ Shows current time (hardcoded).
 ### Example
 
 ```js
-// Time is shown as military format
-<TimeDisplay hours="22" minutes="42" seconds="05" format="00" /> 
+// Time is shown as civilian format, with actual values fetched from RTC
+<TimeDisplay hours={time.getHours()} minutes={time.getMinutes()} seconds={time.getSeconds()} format="12" />
 ```
 
 ---
 
 ## StopwatchWidget
 
-Widget that displays a stopwatch. Can be toggled by clicking the `Switch to Stopwatch` button.
+Widget that displays a fully functional stopwatch with start, stop, lap, and reset buttons. Can be toggled by clicking the `Switch to Stopwatch` button.
 
 ### Props
 
@@ -53,13 +53,25 @@ Widget that displays a stopwatch. Can be toggled by clicking the `Switch to Stop
 |------|------|-----------------------------|
 |currentTime|string| Accepts current time as a string |
 |isRunning|boolean| Changes text color to green if set to true |
-|lapTimes|array| Accepts an array of strings representing time | 
+|lapTimes|string[]| Accepts an array of strings representing time | 
+|onStart|() => void| Called when the start button is pressed |
+|onStop|() => void| Called when the stop button is pressed |
+|onReset|() => void| Called when reset button is pressed |
+|onLap|() => void| Called when lap button is pressed |
 
 ### Example
 
 ```js
-// Shows only one lap
-<StopwatchWidget currentTime="01:23.45" isRunning={false} lapTimes={['00:58.20']} />
+// Calls the appropriate functions, values and handlers
+<StopwatchWidget
+            currentTime={formatTime(elapsed)}
+            isRunning={isRunning}
+            lapTimes={lapTimes}
+            onStart={handleStart}  
+            onStop={handleStop}   
+            onLap={handleLap}
+            onReset={handleReset}
+          />
 ```
 
 ---
@@ -92,9 +104,13 @@ Displays the current mode set as `Clock` or `Stopwatch`.
 | Prop | Type | Description                 |
 |------|------|-----------------------------|
 |currentMode| string | Shows the current display mode |
+|onToggle|() => void | Called when `Switch to <mode>` button is pressed |
 
 ### Example 
 
 ```js
-<ShowCurrentMode currentMode={currentMode} />
+<ShowCurrentMode
+    currentMode={currentMode}
+    onToggle={() => setCurrentMode(prev => prev === 'clock' ? 'stopwatch' : 'clock')}
+/>
 ```
