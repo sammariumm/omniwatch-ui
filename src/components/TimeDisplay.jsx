@@ -10,7 +10,7 @@ function TimeDisplay({ hours, minutes, seconds, format }){
   return (
     <div className="flex flex-col items-center">
       <span className="text-white text-4xl font-bold tracking-tight">
-        {displayHours}:{minutes}
+        {displayHours}:{String(minutes).padStart(2, '0')}
       </span>
       <span className="text-gray-400 text-xs mt-1">
         {period && <span>{period} · </span>}
