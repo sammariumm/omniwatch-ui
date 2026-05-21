@@ -1,4 +1,5 @@
-import { useState, useCallback, useRef } from "react";
+import { useReducer, useCallback, useRef } from "react";
+import { stopwatchReducer, initialState } from "./stopwatchReducer";
 
 function formatTime(ms) {
   const minutes = Math.floor(ms / 60000);
@@ -10,49 +11,45 @@ function formatTime(ms) {
 
 function useStopwatch() {
     // Stopwatch widget state variables
-    const [elapsed, setElapsed] = useState(0);
-    const [isRunning, setIsRunning] = useState(false);
-    const [lapTimes, setLapTimes] = useState([]);
+    const [state, dispatch] = useReducer(stopwatchReducer, initialState);
 
     // Stopwatch widget Handlers
     const intervalRef = useRef(null);
     const elapsedRef = useRef(0);
 
     function handleStart() {
-        if (isRunning) return;
-        setIsRunning(true);
+        if (state.isRunning) return;
+        dispatch({ type: 'START' });
         intervalRef.current = setInterval(() => {
             elapsedRef.current += 10;
-            setElapsed(prev => prev + 10);
+            dispatch({ type: 'TICK' });
         }, 10);
     }
 
     function handleStop() {
         clearInterval(intervalRef.current);
         intervalRef.current = null;
-        setIsRunning(false);
+        dispatch({ type: 'STOP' });
     }
     
     // Implemented useCallback
     const handleLap = useCallback(() => {
-        if (!isRunning) return;
-        setLapTimes(prev => [...prev, formatTime(elapsedRef.current)]);
-    }, [isRunning])
+        if (!state.isRunning) return;
+        dispatch({ type: 'LAP' });
+    }, [state.isRunning]);
 
     function handleReset() {
         clearInterval(intervalRef.current);
         intervalRef.current = null;
         elapsedRef.current = 0;
-        setElapsed(0);
-        setIsRunning(false);
-        setLapTimes([]);
+        dispatch({ type: 'RESET' });
     }
 
 
     return {
-        currentTime: formatTime(elapsed),  // ← pre-formatted so App doesn't need formatTime
-        isRunning,
-        lapTimes,
+        currentTime: formatTime(state.elapsed),  // ← pre-formatted so App doesn't need formatTime
+        isRunning: state.isRunning,
+        lapTimes: state.lapTimes.map(formatTime),  // ← pre-formatted so App doesn't need formatTime
         handleStart,
         handleStop,
         handleLap,
