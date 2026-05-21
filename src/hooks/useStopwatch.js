@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 
 function formatTime(ms) {
   const minutes = Math.floor(ms / 60000);
@@ -14,37 +14,40 @@ function useStopwatch() {
     const [isRunning, setIsRunning] = useState(false);
     const [lapTimes, setLapTimes] = useState([]);
 
-    // Functional updater -> avoids stale closure
-    //setElapsed(prev => prev + 10);
-
-    // Lap appends to array
-    //setLapTimes(prev => [...prev, formatTime(elapsed)]);
-
-    useEffect(() => {
-    if (!isRunning) return;
-
-    const interval = setInterval(() => {
-        setElapsed(prev => prev + 10);
-    }, 10);
-
-    return () => clearInterval(interval);
-    }, [isRunning]);
-
     // Stopwatch widget Handlers
-    const handleStart = () => setIsRunning(true);
-    const handleStop = () => setIsRunning(false);
+    const intervalRef = useRef(null);
+    const elapsedRef = useRef(0);
+
+    function handleStart() {
+        if (isRunning) return;
+        setIsRunning(true);
+        intervalRef.current = setInterval(() => {
+            elapsedRef.current += 10;
+            setElapsed(prev => prev + 10);
+        }, 10);
+    }
+
+    function handleStop() {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+        setIsRunning(false);
+    }
     
     // Implemented useCallback
     const handleLap = useCallback(() => {
-    if (!isRunning) return;
-    setLapTimes(prev => [...prev, formatTime(elapsed)]);
-    }, [isRunning, elapsed])
+        if (!isRunning) return;
+        setLapTimes(prev => [...prev, formatTime(elapsedRef.current)]);
+    }, [isRunning])
 
-    const handleReset = () => {
-    setIsRunning(false);
-    setElapsed(0);
-    setLapTimes([]);
-    };
+    function handleReset() {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+        elapsedRef.current = 0;
+        setElapsed(0);
+        setIsRunning(false);
+        setLapTimes([]);
+    }
+
 
     return {
         currentTime: formatTime(elapsed),  // ← pre-formatted so App doesn't need formatTime
