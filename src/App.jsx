@@ -8,7 +8,7 @@ import ShowCurrentMode from './components/ShowCurrentMode';
 
 import useStopwatch from './hooks/useStopwatch';
 import useTimeDisplay from './hooks/useTimeDisplay';
-import useStats from './hooks/useStats'
+import useStats from './hooks/useStats';
 
 import './index.css';
 
@@ -56,9 +56,9 @@ function App() {
         )}
 
         <div className="flex gap-4">
-          <StatRing label="Steps"      value={stats.steps.toLocaleString()} target="10,000" color="border-green-500"  />
-          <StatRing label="Cal"        value={stats.calories}               target="800"    color="border-orange-500" />
-          <StatRing label="BPM"        value={stats.heartRate}              target="120"    color="border-red-500"    />
+          <StatRing label="Steps"      value={stats.steps.toLocaleString()}         target="10,000" color="border-green-500"  />
+          <StatRing label="Cal"        value={stats.calories.toLocaleString()}      target="800"    color="border-orange-500" />
+          <StatRing label="BPM"        value={stats.heartRate.toLocaleString()}     target="120"    color="border-red-500"    />
         </div>
 
         {/* Sync button */}
