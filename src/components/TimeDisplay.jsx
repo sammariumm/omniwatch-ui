@@ -1,23 +1,16 @@
-function TimeDisplay({ hours, minutes, seconds, format }){
-    const displayHours = format === '12'
-    ? (parseInt(hours) % 12 || 12).toString().padStart(2, '0')
-    : hours
-
-  const period = format === '12'
-    ? parseInt(hours) >= 12 ? 'PM' : 'AM'
-    : null
+function TimeDisplay({ hours, minutes, seconds, format, onClick }){
+  const displayHours = format === '12' ? (hours % 12 || 12) : hours;
 
   return (
-    <div className="flex flex-col items-center">
-      <span className="text-white text-4xl font-bold tracking-tight">
-        {displayHours}:{minutes}
-      </span>
-      <span className="text-gray-400 text-xs mt-1">
-        {period && <span>{period} · </span>}
-        {seconds}s
-      </span>
+    <div className="flex flex-col items-center cursor-pointer select-none" onClick={onClick}>
+      <p className="text-5xl font-bold text-white tracking-tight">
+        {String(displayHours).padStart(2, '0')}:{String(minutes).padStart(2, '0')}
+      </p>
+      <p className="text-sm text-slate-400 mt-1">
+        {format === '12' ? (hours >= 12 ? 'PM' : 'AM') : 'Military'} · {String(seconds).padStart(2, '0')}s
+      </p>
     </div>
-  )
+  );
 }
 
 export default TimeDisplay;

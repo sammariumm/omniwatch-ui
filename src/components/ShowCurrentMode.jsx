@@ -1,15 +1,15 @@
-function ShowCurrentMode( { currentMode } ) {
+function ShowCurrentMode({ currentMode, onToggle }) {
   if (currentMode === 'clock') {
     return (
-        <div className="text-2xl font-bold text-white mb-4">
-          currentMode = Clock
-        </div>
+      <button onClick={onToggle} className="mt-13 text-xs text-slate-400 hover:text-white transition-colors">
+        Switch to Stopwatch
+      </button>
     );
   } else {
     return (
-        <div className="text-2xl font-bold text-white mb-4">
-          currentMode = Stopwatch
-        </div>
+      <button onClick={onToggle} className="mt-2 text-xs text-slate-400 hover:text-white transition-colors">
+        Switch to Clock
+      </button>
     );
   }
 }
