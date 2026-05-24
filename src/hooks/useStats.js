@@ -47,7 +47,6 @@ function useStats() {
         }
     }
 
-    // Spread to update one key
     // Heart rate interval 
     useEffect(() => {
         const id = setInterval(() => {

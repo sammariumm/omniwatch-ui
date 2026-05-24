@@ -5,8 +5,7 @@ import TimeDisplay from './components/TimeDisplay';
 import StatRing from './components/StatRing';
 import StopwatchWidget from './components/StopwatchWidget';
 import ShowCurrentMode from './components/ShowCurrentMode';
-import { WatchProvider } from './components/WatchContext';
-import { useWatch } from './components/WatchContext';
+import { useWatch } from './hooks/useWatch';
 
 import useStopwatch from './hooks/useStopwatch';
 import useTimeDisplay from './hooks/useTimeDisplay';
@@ -44,7 +43,7 @@ function App() {
         </p>
     </div>
 
-    {/* Theme toggle — sits outside the watch */}
+    {/* Theme toggle */}
     <button
       onClick={toggleTheme}
       className="mb-4 px-4 py-1.5 text-xs font-semibold rounded-full border transition-colors

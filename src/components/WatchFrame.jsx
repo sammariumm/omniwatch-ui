@@ -1,4 +1,4 @@
-import { useWatch } from './WatchContext';
+import { useWatch } from '../hooks/useWatch';
 
 function WatchFrame({ children }) {
   const { theme } = useWatch();

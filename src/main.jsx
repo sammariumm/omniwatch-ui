@@ -1,6 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { WatchProvider } from './components/WatchContext';
+import { WatchProvider } from './components/WatchProvider';
 import './index.css'
 import App from './App.jsx'
 

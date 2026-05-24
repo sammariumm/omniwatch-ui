@@ -45,11 +45,10 @@ function useStopwatch() {
         dispatch({ type: 'RESET' });
     }
 
-
     return {
-        currentTime: formatTime(state.elapsed),  // ← pre-formatted so App doesn't need formatTime
+        currentTime: formatTime(state.elapsed),  
         isRunning: state.isRunning,
-        lapTimes: state.lapTimes.map(formatTime),  // ← pre-formatted so App doesn't need formatTime
+        lapTimes: state.lapTimes.map(formatTime),
         handleStart,
         handleStop,
         handleLap,

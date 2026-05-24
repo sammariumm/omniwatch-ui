@@ -1,4 +1,4 @@
-import { useWatch } from './WatchContext';
+import { useWatch } from '../hooks/useWatch';
 
 function StatRing({ value, label, color }) {
   const { colors } = useWatch();
