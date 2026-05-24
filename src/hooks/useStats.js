@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import toast from "react-hot-toast";
 
 function generateRandom(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min
@@ -39,9 +40,10 @@ function useStats() {
             const newStats = await simulateSyncAPI();
             setStats(newStats);
             setLastSync(new Date());
+            toast.success("Stats synced");
         } catch (error) {
-            // console.error(error);
             setSyncError(error.message);
+            toast.error(error.message);
         } finally {
             setIsSyncing(false);
         }

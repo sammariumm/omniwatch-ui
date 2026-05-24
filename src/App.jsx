@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
 
 import WatchFrame from './components/WatchFrame';
 import TimeDisplay from './components/TimeDisplay';
@@ -36,6 +37,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center">
+    <Toaster position="top-center" />
     <div>
       <h1 className="text-5xl font-bold text-white text-center mb-4">OmniWatch UI</h1>
         <p className="text-gray-400 text-lg mb-8">
