@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useState, useEffect } from 'react'
 
 const WatchContext = createContext(null)
 
@@ -7,6 +7,10 @@ export function WatchProvider({ children }) {
   const [timeFormat, setTimeFormat] = useState(() =>
     localStorage.getItem('timeFormat') || '12'
   )
+
+  useEffect(() => {
+        localStorage.setItem('timeFormat', timeFormat);
+  }, [timeFormat]);
 
   const toggleTheme = () =>
     setTheme(prev => prev === 'dark' ? 'light' : 'dark')
