@@ -1,7 +1,23 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 
 function generateRandom(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min
+}
+
+function simulateSyncAPI() {
+    return new Promise ((resolve, reject) => {
+        setTimeout(() => {
+            if (Math.random() < 0.15) {
+                reject(new Error("Sync Error: server error"));
+            } else {
+                resolve({
+                    steps: generateRandom(5000, 12000),
+                    calories: generateRandom(200, 800),
+                    heartRate: generateRandom(58, 110),
+                })
+            }
+        }, 1500)
+    })
 }
 
 function useStats() {
@@ -14,21 +30,22 @@ function useStats() {
 
     const [lastSync, setLastSync] = useState(null);
     const [isSyncing, setIsSyncing] = useState(false);
+    const [syncError, setSyncError] = useState(null);
 
-    const handleSyncStats = useCallback(() => {
+    async function handleSyncStats() {
         setIsSyncing(true);
-
-        // Simulate a network request
-        setTimeout(() => {
-        setStats({
-            steps:     generateRandom(5000, 12000),
-            calories:  generateRandom(200, 800),
-            heartRate: generateRandom(58, 110),
-        });
-        setLastSync(new Date());
-        setIsSyncing(false);
-        }, 1000);
-    }, [])
+        setSyncError(null);
+        try {
+            const newStats = await simulateSyncAPI();
+            setStats(newStats);
+            setLastSync(new Date());
+        } catch (error) {
+            // console.error(error);
+            setSyncError(error.message);
+        } finally {
+            setIsSyncing(false);
+        }
+    }
 
     // Spread to update one key
     // Heart rate interval 
@@ -46,6 +63,7 @@ function useStats() {
         stats,
         lastSync,
         isSyncing,
+        syncError,
         handleSyncStats
     }
 }

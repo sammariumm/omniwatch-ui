@@ -33,7 +33,7 @@ function App() {
   const { time, format, handleToggleFormat } = useTimeDisplay();
 
   // Stats
-  const { stats, lastSync,isSyncing, handleSyncStats } = useStats();
+  const { stats, lastSync, isSyncing, syncError, handleSyncStats } = useStats();
 
   return (
     <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center">
@@ -78,6 +78,10 @@ function App() {
       >
         {isSyncing ? 'Syncing...' : '⇄ SYNC STATS'}
       </button>
+
+      {syncError && (
+        <p className="text-xs text-red-400">{syncError}</p>
+      )}
 
       {currentMode === 'stopwatch' && (
         <StopwatchWidget
