@@ -116,3 +116,31 @@ Displays the current mode set as `Clock` or `Stopwatch`.
     onToggle={() => setCurrentMode(prev => prev === 'clock' ? 'stopwatch' : 'clock')}
 />
 ```
+
+---
+
+## WatchProvider
+
+Component that holds actual Watch states (theme, format). Prevents the code from prop drilling.
+
+### Props
+
+| Prop | Type | Description |
+|------|------|-------------|
+| children | node | The component tree that will have access to the context |
+
+### Example
+
+```js
+// main.jsx
+...
+import WatchProvider from './components/WatchProvider'
+
+createRoot(document.getElementById('root')).render(
+  <StrictMode>
+    <WatchProvider>
+      <App />
+    </WatchProvider>
+  </StrictMode>,
+)
+```
